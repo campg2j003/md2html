@@ -1,9 +1,10 @@
-# 4/27/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
+# 5/4/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
 
 import sys
 import os
 import os.path
 import argparse
+import re
 import markdown
 import markdown.extensions
 
@@ -29,7 +30,9 @@ def main(opts):
 	@type opts: list of string"""
 	parser = argparse.ArgumentParser(description=desc, argument_default="", fromfile_prefix_chars="@")
 	parser.add_argument("input", help="input file name, - reads from stdin (default stdin)")
-	parser.add_argument("-t", dest="title", help="page title")
+	parser.add_argument("-t", "--title", dest="title", help="page title")
+	parser.add_argument("-c", "--toc", dest="toc", action="store_true", help="insert a table of contents")
+	parser.add_argument("-l", "--toclocation", dest="toclocation", help="a Python regular expression that matches the text before which the TOC is to be placed.  Implies -c")
 	
 	args = parser.parse_args(opts)
 	if args.input and args.input != "-":
@@ -42,7 +45,27 @@ def main(opts):
 		#}
 	fout = sys.stdout
 	s = f.read()
-	html = markdown.markdown(s, extensions=['markdown.extensions.toc', 'markdown.extensions.fenced_code'])
+
+	toc = args.toc
+	toclocation = args.toclocation
+	if toclocation: toc = True
+	if toc:
+		#{
+		if not toclocation: toclocation = "^# "
+		s2 = re.sub(toclocation, R"[TOC]\n\g<0>", s, 1, re.M)
+		#} # if toc
+	else:
+		#{
+		s2 = s
+		#} # else not toc
+	#print s2 # debug
+	#print "-- after s2" # debug
+	extensions = ['markdown.extensions.fenced_code']
+	if toc:
+		#{
+		extensions.append('markdown.extensions.toc')
+		#}
+	html = markdown.markdown(s2, extensions=extensions)
 	fout.write(page_template.format(args.title, html))
 	#} # main
 
