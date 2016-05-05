@@ -7,6 +7,10 @@ import argparse
 import re
 import markdown
 import markdown.extensions
+# for py2exe
+import markdown.extensions.fenced_code
+import markdown.extensions.toc
+
 
 # Usage: page_template.format(page_title, body_text)
 page_template = '''\
