@@ -9,7 +9,9 @@ import markdown
 import markdown.extensions
 # for py2exe
 import markdown.extensions.fenced_code
+from markdown.extensions.fenced_code import FencedCodeExtension
 import markdown.extensions.toc
+from markdown.extensions.toc import TocExtension
 
 
 # Usage: page_template.format(page_title, body_text)
@@ -37,6 +39,7 @@ def main(opts):
 	parser.add_argument("-t", "--title", dest="title", help="page title")
 	parser.add_argument("-c", "--toc", dest="toc", action="store_true", help="insert a table of contents")
 	parser.add_argument("-l", "--toclocation", dest="toclocation", help="a Python regular expression that matches the text before which the TOC is to be placed.  Implies -c")
+	parser.add_argument("-T", "--toctitle", dest="toctitle", help="title text shown (in a span) before the TOC, default ''")
 	
 	args = parser.parse_args(opts)
 	if args.input and args.input != "-":
@@ -64,10 +67,11 @@ def main(opts):
 		#} # else not toc
 	#print s2 # debug
 	#print "-- after s2" # debug
-	extensions = ['markdown.extensions.fenced_code']
+	extensions = [FencedCodeExtension()]
 	if toc:
 		#{
-		extensions.append('markdown.extensions.toc')
+		toc_title = args.toctitle
+		extensions.append(TocExtension(title=toc_title))
 		#}
 	html = markdown.markdown(s2, extensions=extensions)
 	fout.write(page_template.format(args.title, html))
