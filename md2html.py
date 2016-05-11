@@ -1,10 +1,11 @@
 # 5/4/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
-__VERSION__ = "0.1.0"
+__VERSION__ = "0.2.1"
 import sys
 import os
 import os.path
 import argparse
 import re
+import io
 import ConfigParser
 import markdown
 import markdown.extensions
@@ -16,7 +17,7 @@ from markdown.extensions.toc import TocExtension
 
 
 # Usage: page_template.format(page_title, body_text)
-page_template = '''\
+page_template = u'''\
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -47,13 +48,15 @@ def main(opts):
 	cfg = ConfigParser.SafeConfigParser()
 	if args.input and args.input != "-":
 		#{
-		f = open(args.input)
+		f = io.open(args.input, mode="rt", encoding="utf-8")
 		#}
 	else:
 		#{
-		f = sys.stdin
+		f = io.open(sys.stdin.fileno(), mode="rt", encoding="utf-8")
 		#}
-	fout = sys.stdout
+	#fout = io.open(sys.stdout.fileno(), mode="wt", encoding="utf-8")
+	# I don't know why, but if I write this encoded I get an extra CR.  I would think writing in binary mode would produce UNIX-style line endings, but on my Windows machine it doesn't.
+	fout = io.open(sys.stdout.fileno(), mode="wb")
 	toc_title = ""
 	page_title = ""
 	if args.input and args.input != "-":
@@ -80,6 +83,7 @@ def main(opts):
 			try:
 				#{
 				toc_title = cfg.get(cfgsection, "toctitle")
+
 				#} # try
 			except ConfigParser.NoOptionError:
 				#{
@@ -120,6 +124,8 @@ def main(opts):
 		#}
 	html = markdown.markdown(s2, extensions=extensions)
 	fout.write(page_template.format(page_title, html))
+	f.close()
+	fout.close()
 	#} # main
 
 if __name__ == "__main__":
