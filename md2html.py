@@ -69,7 +69,10 @@ def main(opts):
 		#} # no input file
 	cfgfile = os.path.join(cfgfile, "md2html.cfg")
 	#print >>sys.stderr, "Reading config file {}".format(cfgfile) # debug
-	cfg.read(cfgfile)
+	with io.open(cfgfile, mode='rt', encoding='utf-8') as cfp:
+		#{
+		cfg.readfp(cfp)
+		#} # with
 	cfgsection = ""
 	if args.input and args.input != "-":
 		#{

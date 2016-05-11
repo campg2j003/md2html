@@ -52,7 +52,7 @@ toctitle="Contents"
 
 # Issues
 
-- The config file is currently not utf-8 encoded.
+- The config file option values read from the command line are not utf-8 encoded.  Since they are inserted into HTML, it should be possible to use &# substitutions.
 
 
 # Conclusion
