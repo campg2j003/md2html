@@ -1,4 +1,4 @@
-Last updated 5/12/16 (for v0.1.1).
+Last updated 5/14/16 (for v0.3.0).
 
 # Introduction
 `html2md` is a tool I use in building the JAWS script for Audacity to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular application.
@@ -8,9 +8,9 @@ To use the binary distribution for Windows, unpack `md2html.zip` in a folder on 
 
 # Usage:
 
-`md2html [-t title] [-c] [-l toc_location] infile`
+`md2html [-t title] [-c] [-l toc_location] infile outfile`
 
-The input and output  use utf-8 encoding.  The output is written to `stdout`.  The options are:
+The input and output  use utf-8 encoding.  The options are:
 
 - `-t`: text placed in the `<title>` element of the HTML page.
 - `-c`: produce a table of contents.

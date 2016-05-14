@@ -1,5 +1,5 @@
 # 5/4/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
-__VERSION__ = "0.2.2"
+__VERSION__ = "0.3.0"
 import sys
 import os
 import os.path
@@ -30,7 +30,7 @@ page_template = u'''\
 '''
 
 desc = """\
-Convert Markdown to HTML.  Writes to stdout"""
+Convert Markdown to HTML"""
 
 def main(opts):
 	#{
@@ -39,6 +39,7 @@ def main(opts):
 	parser = argparse.ArgumentParser(description=desc, argument_default="", fromfile_prefix_chars="@")
 	parser.add_argument("-V", "--version", action="version", version="%(prog)s v{}".format(__VERSION__), help="print program version and exit")
 	parser.add_argument("input", help="input file name, - reads from stdin (default stdin)")
+	parser.add_argument("output", help="output file")
 	parser.add_argument("-t", "--title", dest="title", help="page title")
 	parser.add_argument("-c", "--toc", dest="toc", action="store_true", help="insert a table of contents")
 	parser.add_argument("-l", "--toclocation", dest="toclocation", help="a Python regular expression that matches the text before which the TOC is to be placed.  Implies -c")
@@ -54,9 +55,9 @@ def main(opts):
 		#{
 		f = io.open(sys.stdin.fileno(), mode="rt", encoding="utf-8")
 		#}
-	#fout = io.open(sys.stdout.fileno(), mode="wt", encoding="utf-8")
+	fout = io.open(args.output, mode="wt", encoding="utf-8")
 	# I don't know why, but if I write this encoded I get an extra CR.  I would think writing in binary mode would produce UNIX-style line endings, but on my Windows machine it doesn't.
-	fout = io.open(sys.stdout.fileno(), mode="wb")
+	#fout = io.open(sys.stdout.fileno(), mode="wb")
 	toc_title = ""
 	page_title = ""
 	if args.input and args.input != "-":
@@ -104,7 +105,15 @@ def main(opts):
 		#} # if args.input
 	if args.toctitle: toc_title = args.toctitle
 	if args.title: page_title = args.title
-	s = f.read()
+	try:
+        #{
+		s = f.read()
+        #} # try
+	except UnicodeDecodeError as e:
+		#{
+		print >>sys.stderr, "md2html: UnicodeDecodeError in {}: {}".format(f.name, str(e))
+		sys.exit(1)
+		#} # except
 
 	toc = args.toc
 	toclocation = args.toclocation
@@ -126,7 +135,15 @@ def main(opts):
 		extensions.append(TocExtension(title=toc_title))
 		#}
 	html = markdown.markdown(s2, extensions=extensions)
-	fout.write(page_template.format(page_title, html))
+	try:
+		#{
+		fout.write(page_template.format(page_title, html))
+		#} # try
+	except UnicodeEncodeError as e:
+		#{
+		print >>sys.stderr, "md2html: UnicodeEncodeError writing output for {}: {} (mode for output file is {})".format(f.name, str(e), fout.mode)
+		sys.exit(1)
+		#} except
 	f.close()
 	fout.close()
 	#} # main
