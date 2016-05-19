@@ -1,15 +1,12 @@
-from distutils.core import setup
-import py2exe
+import ez_setup
+ez_setup.use_setuptools()
+from setuptools import setup
 from md2html import __VERSION__
+
 setup(name='md2html',
-	  version=__VERSION__,
 	  author='Gary Campbell',
 	  author_email='campg2003@gmail.com',
-	  description='Convert Markdown to HTML',
-	  requires=['markdown(>=2.6.6)'],
-	  console=['md2html.py'],
-      options={"py2exe":{
-		  "excludes": [
-			  'pyreadline', 'difflib', 'doctest', 'optparse', 'pickle', 'calendar', 'email', 'ftplib', 'httplib', 'rfc822', 'socket', 'select', 'ssl', '_ssl']  # Exclude standard library
-			   }}
-)
+	  version=__VERSION__,
+	  install_requires = ['markdown'],
+	  py_modules=['md2html'],
+	  entry_points = {'console_scripts': ['md2html = md2html:main']})

@@ -1,29 +1,32 @@
-Last updated 5/17/16 (for v0.3.1).
+Last updated 5/19/16 (for v1.0.0).
 
 # Introduction
-`html2md` is a tool I use in building the JAWS script for Audacity to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.
+`html2md` is a tool I use in building the JAWS script for Audacity to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.
 
 # Installation:
-To use the binary distribution for Windows, place `md2html.exe` in a folder on your path.  If you have Python, you can install it by running setup.py.  (Note: this uses `distutils` and `py2exe`, not `ez_setup`.)
+To use the binary distribution for Windows, place `md2html.exe` in a folder on your path.  If you have Python, you can install it by running `python setup.py install`.  (Uninstall it with `pip uninstall md2html`.)
 
 # Usage:
 
-`md2html [-t title] [-c] [-l toc_location] infile outfile`
+`md2html [-q] [-t title] [-c] [-l toc_location] infile outfile`
 
-The input and output  use utf-8 encoding.  The options are:
+The input and output use utf-8 encoding.  The options are:
 
 - `-t`: text placed in the `<title>` element of the HTML page.
 - `-c`: produce a table of contents.
-- `-l`: specify the location of the table of contents.  It is a Python regular expression that matches the text in the source (Markdown) file where the TOC should appear.  The table of contents is placed just before the first match of this re.  The default is `"^# "`, which causes the TOC to be placed just before the first level 1 heading.  (Implies `-c`.)
-- `-T`, `--toctitle`: a title that appears (in a span) just before the TOC.
+- `-l`: specify the location of the table of contents.  It is a Python regular expression that matches the text in the source (Markdown) file where the TOC should appear.  The table of contents is placed just before the first match of this re.  If the string starts with "+", the "+" is removed and the TOC is place after the newline following the start of the matched text.  The default is `"^# "`, which causes the TOC to be placed just before the first level 1 heading.  If the string is only "+", the default is used and the TOC follows the matched line.  (Implies `-c`.)
+- `-T`, `--toctitle`: a title that appears (in a span) just before the TOC.  Implies `-c`
+- `-q`: Suppress informational messages
+
 
 # Configuration File
-`md2html` looks for a file called `md2html.cfg` in the same folder as the source file.  It is an INI-style file containing a section for each source file in the folder.  It can currently contain keywords:
+`md2html` looks for a file called `md2html.cfg` in the same folder as the source file.  It is an INI-style file containing a section for each source file in the folder.  It can currently contain the following options:
 
 - `title=page title`: the title of the HTML page.
 - `toctitle=TOC title`: text that is placed in a `<span>` element just before the TOC.
+- `toclocation=toc location`: same as the `-l` command line option.
 
-This mechanism allows for handling of titles in other languages without requiring inclusion of them in the build system.  The config file is processed using the Python [`ConfigParser`](https://docs.python.org/2/library/configparser.html) module.
+This mechanism allows for handling of titles in other languages without requiring inclusion of them in the build system.  The config file is processed using the Python [`ConfigParser`](https://docs.python.org/2/library/configparser.html) module.  Command line options override configuration file options.
 
 ## Example
 
@@ -61,7 +64,7 @@ toctitle="Contents"
 To build the binary executable distribution file, run:
 
 ```
-python setup.py py2exe
+python setupexe.py py2exe
 makensis setup.nsi
 ```
 
