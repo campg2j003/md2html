@@ -1,4 +1,4 @@
-# 5/18/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
+# 5/19/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
 __VERSION__ = "1.0.0"
 import sys
 import os
@@ -29,6 +29,11 @@ page_template = u'''\
 </html>
 '''
 
+def msg(s):
+    #{
+	print s
+    #} # msg
+        
 desc = """\
 Convert Markdown to HTML"""
 
@@ -50,7 +55,7 @@ def main(opts):
 	cfg = ConfigParser.SafeConfigParser()
 	if args.verbose:
 		#{
-		print >>sys.stderr, "md2html v{}: converting {} to {}".format(__VERSION__, args.input, args.output)
+		msg("md2html v{}: converting {} to {}".format(__VERSION__, args.input, args.output))
 		#} # if verbose
 	toc_title = ""
 	page_title = ""
@@ -64,7 +69,7 @@ def main(opts):
 		cfgfile = os.getcwd()
 	#} # no input file
 	cfgfile = os.path.join(cfgfile, "md2html.cfg")
-	#print >>sys.stderr, "Reading config file {}".format(cfgfile) # debug
+	#msg("Reading config file {}".format(cfgfile) # debug)
 	with io.open(cfgfile, mode='rt', encoding='utf-8') as cfp:
 	#{
 		cfg.readfp(cfp)
@@ -78,7 +83,7 @@ def main(opts):
 	#{
 		if cfg.has_section(cfgsection):
 		#{
-			#print >>sys.stderr, "cfg has section {}".format(cfgsection)
+			#msg("cfg has section {}".format(cfgsection))
 			try:
 			#{
 				toc_title = cfg.get(cfgsection, "toctitle")
@@ -132,7 +137,7 @@ def main(opts):
 	#} # try
 	except UnicodeDecodeError as e:
 	#{
-		print >>sys.stderr, "md2html: UnicodeDecodeError in {}: {}".format(f.name, str(e))
+		msg("md2html: UnicodeDecodeError in {}: {}".format(f.name, str(e)))
 		sys.exit(1)
 	#} # except
 	finally:
@@ -178,7 +183,7 @@ def main(opts):
 	#} # try
 	except UnicodeEncodeError as e:
 	#{
-		print >>sys.stderr, "md2html: UnicodeEncodeError writing output for {}: {} (mode for output file is {})".format(f.name, str(e), fout.mode)
+		msg("md2html: UnicodeEncodeError writing output for {}: {} (mode for output file is {})".format(f.name, str(e), fout.mode))
 		sys.exit(1)
 	#} except
 	finally:

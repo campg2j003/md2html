@@ -1,7 +1,7 @@
 Last updated 5/19/16 (for v1.0.0).
 
 # Introduction
-`html2md` is a tool I use in building the JAWS script for Audacity to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.
+`html2md` is a tool I use in building the JAWS script for Audacity project to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.  It does not support all of the available features of the Python Markdown package, only the ones I use in the project for which it was made.
 
 # Installation:
 To use the binary distribution for Windows, place `md2html.exe` in a folder on your path.  If you have Python, you can install it by running `python setup.py install`.  (Uninstall it with `pip uninstall md2html`.)
@@ -56,6 +56,7 @@ toctitle="Contents"
 # Issues
 
 - The config file option values read from the command line are not utf-8 encoded.  Since they are inserted into HTML, it should be possible to use &# substitutions.
+- In order to make this Python program into a stand-alone executable, it is packaged in a NSIS installer that installs the necessary files in a temp folder, runs the program, and deletes the temp folder.  When this executable is run from a .cmd file, messages do not appear in the output.  They do appear if the program is run from Python, if the executable produced by py2exe is run from a CMD file, or if the NSIS executable is run directly.
 
 
 # Conclusion

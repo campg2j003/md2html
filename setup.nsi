@@ -16,6 +16,7 @@
 Name ${exe}
 OutFile ${exe}
 SilentInstall silent
+RequestExecutionLevel user
 !ifdef icon
     Icon ${icon}
 !endif
