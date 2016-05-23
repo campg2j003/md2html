@@ -15,28 +15,28 @@
 !endif
 Name ${exe}
 OutFile ${exe}
-SilentInstall silent
+;SilentInstall silent
 RequestExecutionLevel user
 !ifdef icon
     Icon ${icon}
 !endif
 
-; - - - - Allow only one installer instance - - - - 
-!ifdef onlyOneInstance
-Function .onInit
- System::Call "kernel32::CreateMutexA(i 0, i 0, t '$(^Name)') i .r0 ?e"
- Pop $0
- StrCmp $0 0 launch
-  Abort
- launch:
-FunctionEnd
-!endif
-; - - - - Allow only one installer instance - - - - 
+InstType exec
+InstType install
+!define INST_EXEC 1
+!define INST_INSTALL 2
+Var CurDir ;CWD when the installer is started.
 
-Section
+;If we choose to install.
+Page Directory
+Page InstFiles
+
+
+Section -exec
+  SectionIn ${INST_EXEC}
     
     ; Get directory from which the exe was called
-    System::Call "kernel32::GetCurrentDirectory(i ${NSIS_MAX_STRLEN}, t .r0)"
+    ;System::Call "kernel32::GetCurrentDirectory(i ${NSIS_MAX_STRLEN}, t .r0)"
     
     ; Unzip into pluginsdir
     InitPluginsDir
@@ -44,9 +44,48 @@ Section
     File /r '${py2exeOutputDir}\*.*'
     
     ; Set working dir and execute, passing through commandline params
-    SetOutPath '$0'
+    SetOutPath '$CurDir'
     ${GetParameters} $R0
-    ExecWait '"$PLUGINSDIR\${exe}" $R0' $R2
+    nsexec::exec '"$PLUGINSDIR\${exe}" $R0'
+    Pop $R2
     SetErrorLevel $R2
  
 SectionEnd
+
+Section -install
+  SectionIn ${INST_INSTALL}
+  SetOutPath $InstDir
+  File /r '${py2exeOutputDir}\*.*'
+SectionEnd
+
+Function .onInit
+  ; - - - - Allow only one installer instance - - - -
+!ifdef onlyOneInstance
+ System::Call "kernel32::CreateMutexA(i 0, i 0, t '$(^Name)') i .r0 ?e"
+ Pop $0
+ StrCmp $0 0 launch
+  Abort
+ launch:
+!endif
+; - - - - Allow only one installer instance - - - -
+    ; Get directory from which the exe was called
+    System::Call "kernel32::GetCurrentDirectory(i ${NSIS_MAX_STRLEN}, t .r0)"
+    StrCpy $CurDir "$0"
+    ${GetParameters} $0
+    ;MessageBox MB_OK "after GetParameters $$0=$0" ; debug
+    ${GetOptions} "$0" "/install" $1
+    IfErrors exec 0
+    ;MessageBox MB_OK "Did not get error flag, installing" ; debug
+    ;Install, not silent
+    SetSilent normal
+    IntOp $0 ${INST_INSTALL} - 1
+    SetCurInstType $0
+    StrCpy $InstDir $CurDir
+    GoTo end
+  exec:
+    ;Install, execute, and remove.
+    SetSilent Silent
+    IntOp $0 ${INST_EXEC} - 1
+    SetCurInstType $0
+    End:
+FunctionEnd

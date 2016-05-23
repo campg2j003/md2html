@@ -1,10 +1,23 @@
-Last updated 5/19/16 (for v1.0.0).
+Last updated 5/23/16 (for v1.0.3).
 
 # Introduction
 `html2md` is a tool I use in building the JAWS script for Audacity project to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.  It does not support all of the available features of the Python Markdown package, only the ones I use in the project for which it was made.
 
 # Installation:
-To use the binary distribution for Windows, place `md2html.exe` in a folder on your path.  If you have Python, you can install it by running `python setup.py install`.  (Uninstall it with `pip uninstall md2html`.)
+To use the binary distribution for Windows, place `md2html.exe` in a folder on your path.  By default, `md2html.exe` installs the real executable to a temporary location, executes it, and removes the temporary installation.  If you prefer, you can install the executable in a folder of your choosing by running:
+
+```
+md2html.exe /install
+```
+
+It will then prompt you to select a folder in which to install the files.  If you install this way, to uninstall just remove the folder.  It will not appear in Program Features.  If you installed in folder myprog, run the installed program by:
+
+```
+myprog\md2html.exe <args>
+```
+
+
+If you have Python, you can install it by downloading md2html.py and setup.py and running `python setup.py install`.  (Uninstall it with `pip uninstall md2html`.)  
 
 # Usage:
 
@@ -56,17 +69,15 @@ toctitle="Contents"
 # Issues
 
 - The config file option values read from the command line are not utf-8 encoded.  Since they are inserted into HTML, it should be possible to use &# substitutions.
-- In order to make this Python program into a stand-alone executable, it is packaged in a NSIS installer that installs the necessary files in a temp folder, runs the program, and deletes the temp folder.  When this executable is run from a .cmd file, messages do not appear in the output.  They do appear if the program is run from Python, if the executable produced by py2exe is run from a CMD file, or if the NSIS executable is run directly.
 
 
 # Conclusion
-`md2html` is built using Python 2.7.10 on Windows 10 using the [Python Markdown](http://pythonhosted.org/Markdown) package v2.6.6.  It uses the `toc` and `fenced_code` extensions.  I have only tested it on Windows 10, but it should be platform-independent, however, there may be EOL and encoding issues.
+`md2html` is built using Python 2.7.10 on Windows 10 using the [Python Markdown](http://pythonhosted.org/Markdown) package v2.6.6.  It uses the `toc` and `fenced_code` extensions.  I have only tested it on Windows 10, but it should be platform-independent, however, there may be EOL and encoding issues.  The [AutoIt](http://www.autoitscript.com) tool is required to build the stand-alone executable. (Version 3.3.14.2 was used to build the current version.) 
 
 To build the binary executable distribution file, run:
 
 ```
-python setupexe.py py2exe
-makensis setup.nsi
+build.cmd
 ```
 
-The finished executable will be in your working directory.
+The finished executable `md2html.exe` will be in your working directory.  You ccan then remove the `build` and `dist` folders created by setupexe.py.
