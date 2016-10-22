@@ -1,4 +1,4 @@
-Last updated 5/23/16 (for v1.0.3).
+Last updated 10/21/16 (for v1.0.4).
 
 # Introduction
 `html2md` is a tool I use in building the JAWS script for Audacity project to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.  It does not support all of the available features of the Python Markdown package, only the ones I use in the project for which it was made.
@@ -23,7 +23,7 @@ If you have Python, you can install it by downloading md2html.py and setup.py an
 
 `md2html [-q] [-t title] [-c] [-l toc_location] infile outfile`
 
-The input and output use utf-8 encoding.  The options are:
+The input file is read with utf-8 encoding.  A utf-8 BOM in the input file will be skipped.  The output file is written as utf-8 and never contains a BOM.  The options are:
 
 - `-t`: text placed in the `<title>` element of the HTML page.
 - `-c`: produce a table of contents.
@@ -33,7 +33,7 @@ The input and output use utf-8 encoding.  The options are:
 
 
 # Configuration File
-`md2html` looks for a file called `md2html.cfg` in the same folder as the source file.  It is an INI-style file containing a section for each source file in the folder.  It can currently contain the following options:
+`md2html` looks for a file called `md2html.cfg` in the same folder as the source file.  It is an INI-style file containing a section for each source file in the folder.  It is read as utf-8 (with or without a BOM).  It can currently contain the following options:
 
 - `title=page title`: the title of the HTML page.
 - `toctitle=TOC title`: text that is placed in a `<span>` element just before the TOC.
