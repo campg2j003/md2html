@@ -1,5 +1,5 @@
 # 5/23/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
-__VERSION__ = "1.0.4"
+__VERSION__ = "1.0.5"
 import sys
 import os
 import os.path
@@ -30,7 +30,7 @@ page_template = u'''\
 '''
 
 def msg(s):
-    #{
+	#{
 	print >>sys.stderr, s
     #} # msg
         
@@ -70,18 +70,21 @@ def main(opts):
 	#} # no input file
 	cfgfile = os.path.join(cfgfile, "md2html.cfg")
 	#msg("Reading config file {}".format(cfgfile) # debug)
-	with io.open(cfgfile, mode='rt', encoding='utf-8-sig') as cfp:
-	#{
-		try:
-			#{
-			cfg.readfp(cfp)
-			#}
-		except ConfigParser.Error as e:
-			#{
-			msg("md2html: Error reading config file: {}".format(str(e)))
-			sys.exit(1)
-			#} # except
-	#} # with
+	if os.path.exists(cfgfile):
+		#{
+		with io.open(cfgfile, mode='rt', encoding='utf-8-sig') as cfp:
+		#{
+			try:
+				#{
+				cfg.readfp(cfp)
+				#}
+			except ConfigParser.Error as e:
+				#{
+				msg("md2html: Error reading config file: {}".format(str(e)))
+				sys.exit(1)
+				#} # except
+			#} # with
+		#} # if cfgfile exists
 	cfgsection = ""
 	if args.input and args.input != "-":
 	#{
