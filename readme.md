@@ -1,4 +1,4 @@
-Last updated 12/21/16 (for v1.0.5).
+Last updated 2/11/18 (for v1.0.6).
 
 # Introduction
 `html2md` is a tool I use in building the JAWS script for Audacity project to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.  It does not support all of the available features of the Python Markdown package, only the ones I use in the project for which it was made.
@@ -27,7 +27,7 @@ The input file is read with utf-8 encoding.  A utf-8 BOM in the input file will 
 
 - `-t`: text placed in the `<title>` element of the HTML page.
 - `-c`: produce a table of contents.
-- `-l`: specify the location of the table of contents.  It is a Python regular expression that matches the text in the source (Markdown) file where the TOC should appear.  The table of contents is placed just before the first match of this re.  If the string starts with "+", the "+" is removed and the TOC is place after the newline following the start of the matched text.  The default is `"^# "`, which causes the TOC to be placed just before the first level 1 heading.  If the string is only "+", the default is used and the TOC follows the matched line.  (Implies `-c`.)
+- `-l`: specify the location of the table of contents.  It is a Python regular expression that matches the text in the source (Markdown) file where the TOC should appear.  The table of contents is placed just before the first match of this re.  If the string starts with "+", the "+" is removed and the TOC is placed after the newline following the start of the matched text.  The default is `"^# "`, which causes the TOC to be placed just before the first level 1 heading.  If the string is only "+", the default is used and the TOC follows the matched line.  (Implies `-c`.)
 - `-T`, `--toctitle`: a title that appears (in a span) just before the TOC.  Implies `-c`
 - `-q`: Suppress informational messages
 

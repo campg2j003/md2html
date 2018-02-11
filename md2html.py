@@ -1,5 +1,5 @@
 # 5/23/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
-__VERSION__ = "1.0.5"
+__VERSION__ = "1.0.6"
 import sys
 import os
 import os.path
@@ -166,18 +166,28 @@ def main(opts):
 		#} # if
 		if not toclocation: toclocation = "^# "
 		m = re.search(toclocation, s, re.M)
-		tocstart = m.start()
-		if aftertoc:
-		#{
-			i = s.find("\n", tocstart)
-			if i > -1: tocstart = i + 1
-		#} # if tocstart
-		s2 = s[:tocstart] + "[TOC]\n" + s[tocstart:]
+		if not m:
+			#{
+			msg("md2html: TOC location not found, disabling toc option. Do your headings start in column 1?")
+			toc = False
+			#}
+		else:
+			#{
+			# toclocation found.
+			tocstart = m.start()
+			if aftertoc:
+				#{
+				i = s.find("\n", tocstart)
+				if i > -1: tocstart = i + 1
+				#} # if tocstart
+			s2 = s[:tocstart] + "[TOC]\n" + s[tocstart:]
+			#} # else toclocation found
 	#} # if toc
-	else:
+	# toc may have been cleared if toclocation not found.
+	if not toc:
 	#{
 		s2 = s
-	#} # else not toc
+	#} # if not toc
 	#print s2 # debug
 	#print "-- after s2" # debug
 	
