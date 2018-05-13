@@ -1,4 +1,4 @@
-Last updated 2/11/18 (for v1.0.6).
+Last updated 5/12/18 (for v1.0.6).
 
 # Introduction
 `html2md` is a tool I use in building the JAWS script for Audacity project to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.  It does not support all of the available features of the Python Markdown package, only the ones I use in the project for which it was made.
@@ -72,7 +72,7 @@ toctitle="Contents"
 
 
 # Conclusion
-`md2html` is built using Python 2.7.10 on Windows 10 using the [Python Markdown](http://pythonhosted.org/Markdown) package v2.6.6.  It uses the `toc` and `fenced_code` extensions.  I have only tested it on Windows 10, but it should be platform-independent, however, there may be EOL and encoding issues.  The [AutoIt](http://www.autoitscript.com) tool is required to build the stand-alone executable. (Version 3.3.14.2 was used to build the current version.) 
+`md2html` is built using Python 2.7.13 on Windows 10 using the [Python Markdown](http://pythonhosted.org/Markdown) package v2.6.11.  It uses the `toc` and `fenced_code` extensions.  I have only tested it on Windows 10, but it should be platform-independent, however, there may be EOL and encoding issues.  The [AutoIt](http://www.autoitscript.com) tool is required to build the stand-alone executable. (Version 3.3.14.2 was used to build the current version.) 
 
 To build the binary executable distribution file, run:
 

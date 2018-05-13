@@ -1,5 +1,5 @@
 # 5/23/16 md2html-- convert Markdown to HTML-- for the Audacity JAWS Script project.
-__VERSION__ = "1.0.6"
+__VERSION__ = "1.0.7"
 import sys
 import os
 import os.path
