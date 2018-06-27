@@ -1,7 +1,7 @@
-Last updated 5/12/18 (for v1.0.6).
+Last updated 6/27/18 (for v1.0.6).
 
 # Introduction
-`html2md` is a tool I use in building the JAWS script for Audacity project to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.  It does not support all of the available features of the Python Markdown package, only the ones I use in the project for which it was made.
+`md2html` is a tool I use in building the JAWS script for Audacity project to convert `readme.md` to HTML.  Although the Python markdown package, on which this tool is built, provides a command line interface, this tool is tailored to the needs of this particular project.  It provides the ability to add a table of contents without placing a `[TOC]` marker in the file, and the ability to place options in a configuration file.  It does not support all of the available features of the Python Markdown package, only the ones I use in the project for which it was made.
 
 # Installation:
 To use the binary distribution for Windows, place `md2html.exe` in a folder on your path.  By default, `md2html.exe` installs the real executable to a temporary location, executes it, and removes the temporary installation.  If you prefer, you can install the executable in a folder of your choosing by running:
